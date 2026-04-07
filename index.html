@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AIG202c Quiz – Ôn Thi AI</title>
+  <meta name="description" content="Ứng dụng ôn thi môn AIG202c – Nhập môn Trí Tuệ Nhân Tạo với 178 câu hỏi trắc nghiệm.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- ========== HOME ========== -->
+  <div id="section-home" class="section active">
+    <div class="bg-orbs">
+      <div class="orb orb1"></div>
+      <div class="orb orb2"></div>
+      <div class="orb orb3"></div>
+    </div>
+
+    <header class="hero">
+      <div class="hero-badge">🎓 Semester 2</div>
+      <h1 class="hero-title">AIG<span class="gradient-text">202c</span> Quiz</h1>
+      <p class="hero-sub">Ôn thi Nhập Môn Trí Tuệ Nhân Tạo</p>
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-val" id="stat-total">178</div><div class="stat-lbl">Câu hỏi</div></div>
+        <div class="stat-card"><div class="stat-val" id="stat-single">168</div><div class="stat-lbl">Đáp án đơn</div></div>
+        <div class="stat-card"><div class="stat-val" id="stat-multi">10</div><div class="stat-lbl">Nhiều đáp án</div></div>
+        <div class="stat-card"><div class="stat-val" id="stat-slides">178</div><div class="stat-lbl">Slides</div></div>
+      </div>
+    </header>
+
+    <div class="container">
+      <!-- Options Bar -->
+      <div class="options-bar">
+        <button class="opt-btn" id="btn-shuffle" title="Xáo trộn câu hỏi">
+          🔀 Shuffle
+        </button>
+        <button class="opt-btn" id="btn-timer" title="Bật bộ đếm thời gian">
+          ⏱ Timer
+        </button>
+      </div>
+
+      <!-- Mode Cards -->
+      <div class="mode-grid">
+        <button class="mode-card mode-all" id="btn-start-all">
+          <div class="mode-icon">📝</div>
+          <div class="mode-title">Full Quiz</div>
+          <div class="mode-desc">Tất cả 178 câu hỏi</div>
+          <div class="mode-arrow">→</div>
+        </button>
+        <button class="mode-card mode-single" id="btn-start-single">
+          <div class="mode-icon">📌</div>
+          <div class="mode-title">Single Answer</div>
+          <div class="mode-desc">Chỉ câu 1 đáp án</div>
+          <div class="mode-arrow">→</div>
+        </button>
+        <button class="mode-card mode-multi" id="btn-start-multi">
+          <div class="mode-icon">📋</div>
+          <div class="mode-title">Multi Answer</div>
+          <div class="mode-desc">Câu chọn nhiều đáp án</div>
+          <div class="mode-arrow">→</div>
+        </button>
+        <button class="mode-card mode-flash" id="btn-flashcard">
+          <div class="mode-icon">🃏</div>
+          <div class="mode-title">Flashcard</div>
+          <div class="mode-desc">Học theo thẻ câu hỏi</div>
+          <div class="mode-arrow">→</div>
+        </button>
+        <button class="mode-card mode-review" id="btn-review-all">
+          <div class="mode-icon">📖</div>
+          <div class="mode-title">Review Mode</div>
+          <div class="mode-desc">Xem đáp án ngay</div>
+          <div class="mode-arrow">→</div>
+        </button>
+      </div>
+
+      <!-- Question Browser -->
+      <div class="browser-section">
+        <div class="browser-header">
+          <h2>📚 Danh sách câu hỏi</h2>
+          <input type="text" id="search-input" placeholder="🔍 Tìm kiếm câu hỏi..." class="search-box">
+        </div>
+        <div class="question-list" id="question-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== QUIZ ========== -->
+  <div id="section-quiz" class="section">
+    <div class="quiz-header">
+      <button class="icon-btn" id="btn-back">← Back</button>
+      <div class="quiz-header-info">
+        <div id="score-display" class="score-display">Score: 0/0</div>
+        <div id="timer-display" class="timer-display" style="display:none">⏱ 30s</div>
+      </div>
+      <button class="icon-btn" id="btn-home">🏠</button>
+    </div>
+
+    <div class="progress-wrapper">
+      <div class="progress-track">
+        <div class="progress-bar" id="progress-bar" style="width:0%"></div>
+      </div>
+      <div id="progress-text" class="progress-text">1/178</div>
+    </div>
+
+    <div class="quiz-body">
+      <div class="quiz-meta">
+        <span class="badge-slide" id="slide-badge">Slide 1</span>
+        <span class="type-badge" id="type-badge">📌 Single</span>
+      </div>
+
+      <div class="question-card">
+        <p class="question-text" id="question-text"></p>
+      </div>
+
+      <div class="options-container" id="options-container"></div>
+
+      <div class="feedback-area" id="feedback-area" style="display:none"></div>
+
+      <div class="quiz-actions">
+        <button class="btn-primary" id="btn-check">✓ Kiểm tra đáp án</button>
+        <button class="btn-success" id="btn-next" style="display:none">Câu tiếp theo →</button>
+      </div>
+
+      <div class="keyboard-hint">
+        <span>⌨️ A/B/C/D để chọn · Enter để xác nhận/tiếp</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== REVIEW ========== -->
+  <div id="section-review" class="section">
+    <div class="quiz-header">
+      <button class="icon-btn" id="btn-rev-home">← Home</button>
+      <div class="review-top-info">
+        <span id="review-progress">1/178</span>
+        <span id="review-slide" class="badge-slide-sm">Slide 1</span>
+        <span id="review-type" class="type-badge-sm">📌 Single</span>
+      </div>
+      <div></div>
+    </div>
+
+    <div class="progress-wrapper">
+      <div class="progress-track">
+        <div class="progress-bar" id="review-progress-bar" style="width:0%"></div>
+      </div>
+    </div>
+
+    <div class="review-body">
+      <div class="question-card">
+        <p class="question-text" id="review-question"></p>
+      </div>
+      <div class="review-options" id="review-options"></div>
+      <div class="review-answer-box" id="review-answer"></div>
+
+      <div class="review-nav">
+        <button class="btn-nav" id="btn-rev-prev">← Trước</button>
+        <button class="btn-nav" id="btn-rev-next">Tiếp →</button>
+      </div>
+      <div class="keyboard-hint">⌨️ ← → để điều hướng</div>
+    </div>
+  </div>
+
+  <!-- ========== FLASHCARD ========== -->
+  <div id="section-flashcard" class="section">
+    <div class="quiz-header">
+      <button class="icon-btn" id="btn-flash-home">← Home</button>
+      <div class="flash-top">
+        <span id="flash-progress">1/178</span>
+        <span id="flash-slide" class="badge-slide-sm">Slide 1</span>
+      </div>
+      <div></div>
+    </div>
+
+    <div class="flashcard-body">
+      <div class="flash-card-wrapper">
+        <div class="flash-card" id="flash-card">
+          <div class="flash-face flash-front" id="flash-front">
+            <div class="flash-question">Loading...</div>
+          </div>
+          <div class="flash-face flash-back" id="flash-back">
+            <div class="flash-ans-label">Answer</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flash-nav">
+        <button class="btn-nav" id="btn-flash-prev">← Trước</button>
+        <div class="flash-flip-hint">Click thẻ để lật</div>
+        <button class="btn-nav" id="btn-flash-next">Tiếp →</button>
+      </div>
+      <div class="keyboard-hint">⌨️ Space để lật · ← → để điều hướng</div>
+    </div>
+  </div>
+
+  <!-- ========== RESULTS ========== -->
+  <div id="section-results" class="section">
+    <div class="results-header">
+      <h2>📊 Kết quả</h2>
+    </div>
+    <div class="results-body">
+      <div class="results-hero">
+        <div class="pie-chart" id="pie-chart"></div>
+        <div class="results-score-box">
+          <div class="result-score" id="result-score">0/0</div>
+          <div class="result-pct" id="result-pct">0%</div>
+          <div class="result-grade" id="result-grade">📚 Keep Studying!</div>
+          <div class="pie-legend">
+            <span class="legend-correct">✓ Đúng: <strong id="pie-correct">0</strong></span>
+            <span class="legend-wrong">✗ Sai: <strong id="pie-wrong">0</strong></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="results-actions">
+        <button class="btn-primary" id="btn-retry">🔄 Làm lại</button>
+        <button class="btn-outline" id="btn-results-home">🏠 Về trang chủ</button>
+      </div>
+
+      <h3 class="breakdown-title">Chi tiết từng câu</h3>
+      <div class="results-breakdown" id="results-breakdown"></div>
+    </div>
+  </div>
+
+  <!-- ========== PREVIEW MODAL ========== -->
+  <div id="preview-modal" class="modal-overlay">
+    <div class="modal-box">
+      <button class="modal-close" id="preview-close">✕</button>
+      <div id="preview-content"></div>
+    </div>
+  </div>
+
+  <script src="questions.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
